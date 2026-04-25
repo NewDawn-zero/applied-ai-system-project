@@ -129,3 +129,9 @@ Add the ability to mark tasks complete directly in the Streamlit UI.
 **Key Takeaway**
 
 Designing the system before writing code made the whole build process much smoother and I always knew exactly what the next step was.
+
+## Portfolio
+
+**GitHub:** https://github.com/NewDawn-zero/applied-ai-system-project.git
+
+This project shows I can take a working system and extend it into something smarter and more reliable. I added retrieval, agentic reasoning, and automated testing -- not just as features, but as things that make the AI more trustworthy and explainable. That is the kind of engineer I want to be.
