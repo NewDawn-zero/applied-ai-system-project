@@ -1,2 +1,4 @@
 streamlit>=1.30
+anthropic
+python-dotenv
 pytest>=7.0

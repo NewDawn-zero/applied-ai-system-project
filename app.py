@@ -1,5 +1,9 @@
+from dotenv import load_dotenv
+load_dotenv()
 import streamlit as st
 from pawpal_system import Owner, Pet, Task, Scheduler
+from rag_engine import ask_rag, confidence_score
+from agent import run_agent
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 st.title("🐾 PawPal+")
@@ -22,7 +26,6 @@ if st.button("Create Owner & Pet"):
 if st.session_state.owner:
     st.divider()
     st.subheader("Add a Task")
-
     pet_options = [p.name for p in st.session_state.owner.pets]
     selected_pet = st.selectbox("Pet", pet_options)
     task_title = st.text_input("Task title")
@@ -39,7 +42,6 @@ if st.session_state.owner:
 
     st.divider()
     st.subheader("Today's Schedule")
-
     scheduler = Scheduler(st.session_state.owner)
     schedule = scheduler.sort_by_time()
 
@@ -47,10 +49,30 @@ if st.session_state.owner:
         for pet, task in schedule:
             status = "✅" if task.completed else "⬜"
             st.write(f"{status} [{task.time}] {task.title} ({pet}) - {task.duration}min | {task.priority}")
-
         conflicts = scheduler.detect_conflicts()
         if conflicts:
             for c in conflicts:
                 st.warning(c)
     else:
         st.info("No tasks yet.")
+
+    st.divider()
+    st.subheader("Ask PawPal+ (AI Assistant)")
+    user_question = st.text_input("Ask a pet care question...")
+    if st.button("Ask"):
+        if user_question:
+            with st.spinner("Thinking..."):
+                schedule_text = scheduler.daily_schedule()
+                answer, retrieved = ask_rag(user_question, schedule_text)
+                score = confidence_score(answer, [retrieved])
+            st.success(answer)
+            st.caption(f"Confidence Score: {score}")
+            with st.expander("View retrieved knowledge"):
+                st.text(retrieved)
+
+    st.divider()
+    st.subheader("AI Schedule Agent")
+    if st.button("Run Agent Analysis"):
+        with st.spinner("Agent is analyzing your schedule..."):
+            result = run_agent(st.session_state.owner)
+        st.text(result)
