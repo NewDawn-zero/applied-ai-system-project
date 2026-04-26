@@ -81,7 +81,7 @@ slightly on grooming and food safety questions where the knowledge
 base chunks did not match closely enough.
 
 ## Loom Walkthrough
-[Loom link here]
+[Loom link: https://www.loom.com/share/7e66d941594d4d7a8b74be01831bd94b]
 
 ## System Design
 
